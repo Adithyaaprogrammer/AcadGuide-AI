@@ -1,20 +1,26 @@
 import {Outlet, RouterProvider, createBrowserRouter} from 'react-router-dom';
 
 //components
+import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 
 //pages
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import StudentDashboard from './pages/StudentDashboard';
+import CoursePage from './Pages/CoursePage';
+import AIAgent from './Pages/AIAgent';
 
 const AppLayout = () => {
   return (
     <div className='flex flex-col min-h-screen bg-gray-100'>
       <Navbar />
+      <div className='flex flex-row'>
+        <Sidebar />
+      </div>
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
@@ -41,6 +47,14 @@ const App = () => {
         {
           path: '/student-dashboard',
           element: <StudentDashboard />,
+        },
+        {
+          path: '/course-page',
+          element: <CoursePage />,
+        },
+        {
+          path: '/ai-agent',
+          element: <AIAgent />,
         },
       ]
     }
