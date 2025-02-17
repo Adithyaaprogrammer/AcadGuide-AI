@@ -26,7 +26,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container mx-auto my-auto px-4 py-6">
+    <div className="ml-16 container mx-auto my-auto px-4 py-6">
       <div className="grid grid-cols-2 gap-8">
 
         <div className="space-y-4">

@@ -8,7 +8,7 @@ const courses = [
 
 const CoursePage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-left p-6 m-10">
+    <div className="min-h-screen ml-16 bg-gray-100 flex flex-col items-left p-6 m-14">
       <h1 className="text-4xl font-bold mb-6">My Current Courses</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-10">
         {courses.map((course) => (

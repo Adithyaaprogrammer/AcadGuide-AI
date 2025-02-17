@@ -11,6 +11,7 @@ import Signup from './pages/Signup';
 import StudentDashboard from './pages/StudentDashboard';
 import CoursePage from './Pages/CoursePage';
 import AIAgent from './Pages/AIAgent';
+import Home from './Pages/Home';
 
 const AppLayout = () => {
   return (
@@ -43,6 +44,10 @@ const App = () => {
         {
           path: '/signup',
           element: <Signup />,
+        },
+        {
+          path: '/home',
+          element: <Home />,
         },
         {
           path: '/student-dashboard',
