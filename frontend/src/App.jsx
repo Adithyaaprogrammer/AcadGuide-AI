@@ -9,6 +9,8 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import StudentDashboard from './pages/StudentDashboard';
+import InstructorDashboard from './pages/InstructorDashboard';
+import InstructorCoursePage from './pages/InstructorCoursePage';
 import CoursePage from './Pages/CoursePage';
 import AIAgent from './Pages/AIAgent';
 import Home from './Pages/Home';
@@ -56,6 +58,14 @@ const App = () => {
         {
           path: '/course-page',
           element: <CoursePage />,
+        },
+        {
+          path: '/instructor-dashboard',
+          element: <InstructorDashboard />,
+        },
+        {
+          path: '/instructor-course-page',
+          element: <InstructorCoursePage />,
         },
         {
           path: '/ai-agent',

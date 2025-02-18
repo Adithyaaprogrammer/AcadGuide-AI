@@ -9,7 +9,7 @@ const Navbar = () => {
 
       {user ? (
         <div className="flex items-center space-x-2">
-          <span className="text-black font-medium mx-5 text-lg">{user.regNo}</span>
+          <span className="text-black font-medium mx-4 text-lg">{user.regNo}</span>
           <img src={PROFILE} alt="Profile" className="w-10 h-10 rounded-full" />
         </div>
       ) : (
