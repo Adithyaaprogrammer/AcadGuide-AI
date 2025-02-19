@@ -16,16 +16,10 @@ const Home = () => {
           
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              to="/student-dashboard"
+              to="/login"
               className="px-6 py-3 bg-green-600 text-lg font-semibold rounded-full hover:bg-green-700 transition shadow-lg"
             >
-              Continue as Student
-            </Link>
-            <Link 
-              to="/instructor-dashboard"
-              className="px-6 py-3 bg-green-600 text-lg font-semibold rounded-full hover:bg-green-700 transition shadow-lg"
-            >
-              Continue as Instructor
+              Continue
             </Link>
           </div>
         </div>

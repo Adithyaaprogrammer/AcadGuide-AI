@@ -14,6 +14,7 @@ import InstructorCoursePage from './pages/InstructorCoursePage';
 import CoursePage from './Pages/CoursePage';
 import AIAgent from './Pages/AIAgent';
 import Home from './Pages/Home';
+import SpecificCoursePage from './Pages/SpecificCoursePage';
 
 const AppLayout = () => {
   return (
@@ -37,7 +38,7 @@ const App = () => {
       children: [
         {
           path: '/',
-          element: <Login />,
+          element: <Home />,
         },
         {
           path: '/login',
@@ -71,6 +72,10 @@ const App = () => {
           path: '/ai-agent',
           element: <AIAgent />,
         },
+        {
+          path: '/course/:name',
+          element: <SpecificCoursePage />,
+        },        
       ]
     }
   ]);

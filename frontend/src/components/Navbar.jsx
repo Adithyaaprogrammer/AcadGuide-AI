@@ -1,11 +1,12 @@
 import { PROFILE } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = { regNo: "25F3001702", name: "John Doe" };
   
   return (
     <div className="flex justify-between bg-orange-400 p-4 items-center">
-      <h1 className="text-2xl text-black font-medium font-sans">StudySmart AI</h1>
+      <Link to ="/"><h1 className="text-2xl text-black font-medium font-sans">StudySmart AI</h1></Link>
 
       {user ? (
         <div className="flex items-center space-x-2">
