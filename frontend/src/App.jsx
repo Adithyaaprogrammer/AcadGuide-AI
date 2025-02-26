@@ -4,6 +4,7 @@ import {Outlet, RouterProvider, createBrowserRouter} from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 // import Footer from './components/Footer';
+import AIButton from './components/AIButton';
 
 //pages
 import Login from './pages/Login';
@@ -23,6 +24,7 @@ const AppLayout = () => {
       <div className='flex flex-row'>
         <Sidebar />
       </div>
+      <AIButton />
       <Outlet />
       {/* <Footer /> */}
     </div>
