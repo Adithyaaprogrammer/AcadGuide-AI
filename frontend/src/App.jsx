@@ -16,20 +16,24 @@ import CoursePage from './Pages/CoursePage';
 import AIAgent from './Pages/AIAgent';
 import Home from './Pages/Home';
 import SpecificCoursePage from './Pages/SpecificCoursePage';
+import StudentAIModal from './components/StudentAIModal';
 
 const AppLayout = () => {
   return (
-    <div className='flex flex-col min-h-screen bg-gray-100'>
+    <div className="flex flex-col h-screen overflow-hidden bg-gray-100">
       <Navbar />
-      <div className='flex flex-row'>
+      <div className="flex flex-row flex-1 overflow-hidden">
         <Sidebar />
+        <div className="flex-1 overflow-hidden">
+          <Outlet />
+        </div>
       </div>
       <AIButton />
-      <Outlet />
+      <StudentAIModal />
       {/* <Footer /> */}
     </div>
   );
-}
+};
 
 const App = () => {
 

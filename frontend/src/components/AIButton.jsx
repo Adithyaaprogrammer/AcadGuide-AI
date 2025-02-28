@@ -2,6 +2,10 @@ import { ConfigProvider } from "antd";
 import { AI_BOT } from "../utils/constants";
 
 const AIButton = () => {
+  const openChatbot = () => {
+    window.dispatchEvent(new CustomEvent("AIButtonClick", { detail: "openAIChatbot" }));
+  };
+
   return (
     <ConfigProvider
       theme={{
@@ -19,11 +23,11 @@ const AIButton = () => {
           border: "none",
           background: "orange",
           padding: "10px",
-          borderRadius: "10%",
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.7)",
+          borderRadius: "60%",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.8)",
           cursor: "pointer",
         }}
-        // onClick={() => window.location.href = "/help"}
+        onClick={openChatbot}
       >
         <img 
           src={AI_BOT}

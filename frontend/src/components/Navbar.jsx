@@ -5,7 +5,7 @@ const Navbar = () => {
   const user = { regNo: "25F3001702", name: "John Doe" };
   
   return (
-    <div className="flex justify-between bg-orange-400 p-4 items-center">
+    <div className="flex justify-between bg-orange-400 p-4 items-center z-10">
       <Link to ="/"><h1 className="text-2xl text-black font-medium font-sans">StudySmart AI</h1></Link>
 
       {user ? (
