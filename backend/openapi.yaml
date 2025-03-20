@@ -1,0 +1,1279 @@
+openapi: 3.1.0
+info:
+  title: StudySmart AI
+  version: 0.1.0
+paths:
+  /auth/register:
+    post:
+      tags:
+      - Authentication
+      summary: Register
+      operationId: register_auth_register_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: Login
+      operationId: login_auth_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserForm'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /auth/logout:
+    post:
+      tags:
+      - Authentication
+      summary: Logout
+      operationId: logout_auth_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/users/{user_id}:
+    get:
+      tags:
+      - Users
+      summary: Get User
+      operationId: get_user_api_users__user_id__get
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/users/email/{email}:
+    get:
+      tags:
+      - Users
+      summary: Get User By Email
+      operationId: get_user_by_email_api_users_email__email__get
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Email
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/users/:
+    post:
+      tags:
+      - Users
+      summary: Register User
+      operationId: register_user_api_users__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/users/authenticate:
+    post:
+      tags:
+      - Users
+      summary: Authenticate User
+      operationId: authenticate_user_api_users_authenticate_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      security:
+      - HTTPBasic: []
+  /api/courses/{course_id}:
+    get:
+      tags:
+      - Courses
+      summary: Get Course
+      operationId: get_course_api_courses__course_id__get
+      parameters:
+      - name: course_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Course Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/courses/:
+    get:
+      tags:
+      - Courses
+      summary: Get Courses
+      operationId: get_courses_api_courses__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+      - Courses
+      summary: Create Course
+      operationId: create_course_api_courses__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/courses/instructor/{instructor_id}:
+    get:
+      tags:
+      - Courses
+      summary: Get Instructor Courses
+      operationId: get_instructor_courses_api_courses_instructor__instructor_id__get
+      parameters:
+      - name: instructor_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Instructor Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/enrollments/:
+    post:
+      tags:
+      - Enrollments
+      summary: Enroll Student
+      operationId: enroll_student_api_enrollments__post
+      parameters:
+      - name: student_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Student Id
+      - name: course_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Course Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/enrollments/student/{student_id}:
+    get:
+      tags:
+      - Enrollments
+      summary: Get Student Enrollments
+      operationId: get_student_enrollments_api_enrollments_student__student_id__get
+      parameters:
+      - name: student_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Student Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/weeks/:
+    post:
+      tags:
+      - Weeks
+      summary: Create Week
+      operationId: create_week_api_weeks__post
+      parameters:
+      - name: course_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Course Id
+      - name: week_number
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/weeks/{week_id}:
+    get:
+      tags:
+      - Weeks
+      summary: Get Week
+      operationId: get_week_api_weeks__week_id__get
+      parameters:
+      - name: week_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/assignments/:
+    post:
+      tags:
+      - Assignments
+      summary: Create Assignment
+      operationId: create_assignment_api_assignments__post
+      parameters:
+      - name: week_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Week Id
+      - name: title
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Title
+      - name: type
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/assignments/{assignment_id}:
+    get:
+      tags:
+      - Assignments
+      summary: Get Assignment
+      operationId: get_assignment_api_assignments__assignment_id__get
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Assignment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/assignments/week/{week_id}:
+    get:
+      tags:
+      - Assignments
+      summary: Get Week Assignments
+      operationId: get_week_assignments_api_assignments_week__week_id__get
+      parameters:
+      - name: week_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/videos/:
+    post:
+      tags:
+      - Videos
+      summary: Create Video
+      operationId: create_video_api_videos__post
+      parameters:
+      - name: week_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Week Id
+      - name: title
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Title
+      - name: youtube_url
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Youtube Url
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/videos/{video_id}:
+    get:
+      tags:
+      - Videos
+      summary: Get Video
+      operationId: get_video_api_videos__video_id__get
+      parameters:
+      - name: video_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Video Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/submissions/:
+    post:
+      tags:
+      - Submissions
+      summary: Create Submission
+      operationId: create_submission_api_submissions__post
+      parameters:
+      - name: assignment_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Assignment Id
+      - name: student_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Student Id
+      - name: content
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Content
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/submissions/grade:
+    post:
+      tags:
+      - Submissions
+      summary: Grade Submission
+      operationId: grade_submission_api_submissions_grade_post
+      parameters:
+      - name: submission_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Submission Id
+      - name: grade
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Grade
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/submissions/student/{student_id}:
+    get:
+      tags:
+      - Submissions
+      summary: Get Student Submissions
+      operationId: get_student_submissions_api_submissions_student__student_id__get
+      parameters:
+      - name: student_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Student Id
+      - name: assignment_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Assignment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/answer_question:
+    post:
+      tags:
+      - AI Services
+      summary: Answer Question
+      operationId: answer_question_api_ai_answer_question_post
+      parameters:
+      - name: question
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Question
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/generate_study_plan:
+    post:
+      tags:
+      - AI Services
+      summary: Generate Study Plan
+      operationId: generate_study_plan_api_ai_generate_study_plan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/structured_learning_path:
+    post:
+      tags:
+      - AI Services
+      summary: Structured Learning Path
+      operationId: structured_learning_path_api_ai_structured_learning_path_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningPathRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/resource_recommendation:
+    post:
+      tags:
+      - AI Services
+      summary: Resource Recommendation
+      operationId: resource_recommendation_api_ai_resource_recommendation_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/assignment_reminders:
+    post:
+      tags:
+      - AI Services
+      summary: Assignment Reminders
+      operationId: assignment_reminders_api_assignment_reminders_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentReminderRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/engagement_notifications:
+    post:
+      tags:
+      - AI Services
+      summary: Engagement Notifications
+      operationId: engagement_notifications_api_engagement_notifications_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EngagementNotificationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/debugging_tips:
+    post:
+      tags:
+      - AI Services
+      summary: Debugging Tips
+      operationId: debugging_tips_api_ai_debugging_tips_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DebuggingTipsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ai/common_errors_faqs:
+    get:
+      tags:
+      - AI Services
+      summary: Common Errors Faqs
+      operationId: common_errors_faqs_api_ai_common_errors_faqs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/ai/portal_assistance:
+    post:
+      tags:
+      - AI Services
+      summary: Portal Assistance
+      operationId: portal_assistance_api_ai_portal_assistance_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortalAssistanceRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/questions/:
+    get:
+      tags:
+      - Questions
+      summary: Get Questions Endpoint
+      operationId: get_questions_endpoint_api_questions__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/QuestionResponse'
+                type: array
+                title: Response Get Questions Endpoint Api Questions  Get
+    post:
+      tags:
+      - Questions
+      summary: Create Question Endpoint
+      operationId: create_question_endpoint_api_questions__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /student/dashboard:
+    get:
+      tags:
+      - Student
+      summary: Get Student Dashboard
+      operationId: get_student_dashboard_student_dashboard_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDashboardResponse'
+  /instructor/instructor_dashboard:
+    get:
+      tags:
+      - Instructor
+      summary: Get Instructor Dashboard
+      operationId: get_instructor_dashboard_instructor_instructor_dashboard_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructorDashboardResponse'
+  /protected:
+    get:
+      summary: Protected Route
+      operationId: protected_route_protected_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /:
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    AssignmentReminderRequest:
+      properties:
+        student_id:
+          type: integer
+          title: Student Id
+        assignment:
+          type: string
+          title: Assignment
+      type: object
+      required:
+      - student_id
+      - assignment
+      title: AssignmentReminderRequest
+    CorrectOptionCreate:
+      properties:
+        option_id:
+          type: integer
+          title: Option Id
+      type: object
+      required:
+      - option_id
+      title: CorrectOptionCreate
+    CorrectOptionResponse:
+      properties:
+        option_id:
+          type: integer
+          title: Option Id
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - option_id
+      - id
+      title: CorrectOptionResponse
+    CourseCreate:
+      properties:
+        title:
+          type: string
+          title: Title
+        instructor_id:
+          type: integer
+          title: Instructor Id
+      type: object
+      required:
+      - title
+      - instructor_id
+      title: CourseCreate
+    CourseProgress:
+      properties:
+        course_name:
+          type: string
+          title: Course Name
+        average_progress:
+          type: number
+          title: Average Progress
+        median_progress:
+          type: number
+          title: Median Progress
+        student_progress_list:
+          items:
+            type: number
+          type: array
+          title: Student Progress List
+      type: object
+      required:
+      - course_name
+      - average_progress
+      - median_progress
+      - student_progress_list
+      title: CourseProgress
+    DebuggingTipsRequest:
+      properties:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: DebuggingTipsRequest
+    EngagementNotificationRequest:
+      properties:
+        student_id:
+          type: integer
+          title: Student Id
+      type: object
+      required:
+      - student_id
+      title: EngagementNotificationRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InstructorDashboardResponse:
+      properties:
+        courses_progress:
+          items:
+            $ref: '#/components/schemas/CourseProgress'
+          type: array
+          title: Courses Progress
+      type: object
+      required:
+      - courses_progress
+      title: InstructorDashboardResponse
+    LearningPathRequest:
+      properties:
+        level:
+          type: string
+          title: Level
+        completed_courses:
+          items:
+            type: string
+          type: array
+          title: Completed Courses
+      type: object
+      required:
+      - level
+      - completed_courses
+      title: LearningPathRequest
+    PortalAssistanceRequest:
+      properties:
+        issue:
+          type: string
+          title: Issue
+      type: object
+      required:
+      - issue
+      title: PortalAssistanceRequest
+    QuestionCreate:
+      properties:
+        question_text:
+          type: string
+          title: Question Text
+        question_type:
+          type: string
+          title: Question Type
+        assessment_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Assessment Id
+        week_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Week Id
+        options:
+          items:
+            $ref: '#/components/schemas/QuestionOptionCreate'
+          type: array
+          title: Options
+        correct_option:
+          $ref: '#/components/schemas/CorrectOptionCreate'
+      type: object
+      required:
+      - question_text
+      - question_type
+      - options
+      - correct_option
+      title: QuestionCreate
+    QuestionOptionCreate:
+      properties:
+        option_text:
+          type: string
+          title: Option Text
+      type: object
+      required:
+      - option_text
+      title: QuestionOptionCreate
+    QuestionOptionResponse:
+      properties:
+        option_text:
+          type: string
+          title: Option Text
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - option_text
+      - id
+      title: QuestionOptionResponse
+    QuestionResponse:
+      properties:
+        question_text:
+          type: string
+          title: Question Text
+        question_type:
+          type: string
+          title: Question Type
+        assessment_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Assessment Id
+        week_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Week Id
+        id:
+          type: integer
+          title: Id
+        options:
+          items:
+            $ref: '#/components/schemas/QuestionOptionResponse'
+          type: array
+          title: Options
+        correct_option:
+          anyOf:
+          - $ref: '#/components/schemas/CorrectOptionResponse'
+          - type: 'null'
+      type: object
+      required:
+      - question_text
+      - question_type
+      - id
+      - options
+      - correct_option
+      title: QuestionResponse
+    ResourceRequest:
+      properties:
+        topic:
+          type: string
+          title: Topic
+      type: object
+      required:
+      - topic
+      title: ResourceRequest
+    StudentDashboardResponse:
+      properties:
+        subjects_progress:
+          items:
+            $ref: '#/components/schemas/SubjectProgress'
+          type: array
+          title: Subjects Progress
+      type: object
+      required:
+      - subjects_progress
+      title: StudentDashboardResponse
+    StudyPlanRequest:
+      properties:
+        course_id:
+          type: integer
+          title: Course Id
+        student_id:
+          type: integer
+          title: Student Id
+      type: object
+      required:
+      - course_id
+      - student_id
+      title: StudyPlanRequest
+    SubjectProgress:
+      properties:
+        course_name:
+          type: string
+          title: Course Name
+        student_progress:
+          type: number
+          title: Student Progress
+        average_progress:
+          type: number
+          title: Average Progress
+        median_progress:
+          type: number
+          title: Median Progress
+      type: object
+      required:
+      - course_name
+      - student_progress
+      - average_progress
+      - median_progress
+      title: SubjectProgress
+    User:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          title: Email
+        role:
+          type: string
+          title: Role
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - username
+      - email
+      - role
+      - id
+      title: User
+    UserCreate:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          title: Email
+        role:
+          type: string
+          title: Role
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+      - username
+      - email
+      - role
+      - password
+      title: UserCreate
+    UserForm:
+      properties:
+        email:
+          type: string
+          title: Email
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+      - email
+      - password
+      title: UserForm
+    UserResponse:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          format: email
+          title: Email
+        role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Role
+          default: student
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - username
+      - email
+      - id
+      title: UserResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBasic:
+      type: http
+      scheme: basic
