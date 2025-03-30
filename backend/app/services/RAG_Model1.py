@@ -1,16 +1,17 @@
 import os
 from typing import List, Dict
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
-os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
+os.environ["GROQ_API_KEY"] = "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"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-llm = ChatGroq(model_name="mixtral-8x7b-32768")
+llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 
-embeddings = HuggingFaceEmbeddings()
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
 course_data = [
     "Foundation Level: English 1, Math 1, Statistics 1, Computational Thinking, English 2, Math 2, Statistics 2, Python",
@@ -29,27 +30,15 @@ prompt_template = PromptTemplate(
     template="Given the {level} in the IIT Madras BS Data Science program and the completed courses: {completed_courses}, provide a structured path for selecting upcoming courses. Include course names and a recommended order."
 )
 
+
 def get_course_recommendations(level: str, completed_courses: List[str]) -> Dict[str, List[str]]:
     query = prompt_template.format(level=level, completed_courses=", ".join(completed_courses))
-    result = qa_chain.run(query)
-    lines = result.split('\n')
-    recommendations = {"Recommended Courses": [], "Order": []}
-    for line in lines:
-        if line.startswith("- "):
-            recommendations["Recommended Courses"].append(line[2:])
-        elif line.startswith("Order: "):
-            recommendations["Order"] = line[7:].split(", ")
-    
-    return recommendations
+    result = qa_chain.invoke(query).get("result")
+    return result
+
 
 level = "Diploma in Programming"
 completed_courses = ["Database Management Systems", "Programming Data Structures & Algorithms using Python"]
 recommendations = get_course_recommendations(level, completed_courses)
 
-print("Recommended Courses:")
-for course in recommendations["Recommended Courses"]:
-    print(f"- {course}")
-
-print("\nRecommended Order:")
-for i, course in enumerate(recommendations["Order"], 1):
-    print(f"{i}. {course}")
+print("Recommended Courses:", recommendations)
