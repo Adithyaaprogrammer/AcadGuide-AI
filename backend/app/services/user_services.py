@@ -35,7 +35,8 @@ def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)
     if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    return user
+    db_user = User(username=user.username, email=user.email, role=user.role)
+    return db_user
 
 def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     username = request.cookies.get('session')
