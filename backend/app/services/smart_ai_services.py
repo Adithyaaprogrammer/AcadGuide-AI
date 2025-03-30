@@ -72,7 +72,16 @@ def engagement_notifications(student_id: int):
     return {"student_id": student_id, "notification": "Engagement notification sent"}
 
 def debugging_tips(code: str):
-    return {"code_snippet": code, "tips": "Check for syntax errors and correct indentations."}
+    prompt_template = PromptTemplate(
+    input_variables=["code"],
+    template="Analyze the following code snippet and provide step-by-step debugging tips, along with resources or techniques that can help resolve potential issues:\n\nCode:\n{code}"
+)
+    vector_db = Chroma(persist_directory='db', embedding_function=HuggingFaceEmbeddings())
+    retriever = vector_db.as_retriever()
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+    result = qa_chain.run(prompt_template.format(code=code))
+  
+    return {"question":code, "tips": result}
 
 def common_errors_faqs():
     return {"FAQs": ["Common Syntax Errors", "How to debug loops?", "Why does my code crash?"]}
