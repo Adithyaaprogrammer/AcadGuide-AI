@@ -6,13 +6,13 @@ from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
-os.environ["GROQ_API_KEY"] = "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"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
 
-llm = ChatGroq(model_name="llama-3.3-70b-versatile")
+llm = ChatGroq(model_name="mixtral-8x7b-32768")
 
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+embeddings = HuggingFaceEmbeddings()
 
+# Course data and vector stores
 course_data = [
     "Foundation Level: English 1, Math 1, Statistics 1, Computational Thinking, English 2, Math 2, Statistics 2, Python",
     "Diploma in Programming: Database Management Systems, Programming Data Structures & Algorithms using Python, Modern Application Development 1, Modern Application Development 2, Programming Concepts Using Java, System Commands",
@@ -21,24 +21,49 @@ course_data = [
 ]
 
 vectorstore = Chroma.from_texts(texts=course_data, embedding=embeddings)
+answer_vectorstore = Chroma(embedding_function=embeddings)
 
-retriever = vectorstore.as_retriever()
-qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+# Combined retrieval function
+def combined_retriever(query: str):
+    course_context = vectorstore.similarity_search(query)
+    answer_context = answer_vectorstore.similarity_search(query)
+    return course_context + answer_context
 
+# QA chain setup
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=vectorstore.as_retriever()
+)
+
+# Prompt template
 prompt_template = PromptTemplate(
     input_variables=["level", "completed_courses"],
-    template="Given the {level} in the IIT Madras BS Data Science program and the completed courses: {completed_courses}, provide a structured path for selecting upcoming courses. Include course names and a recommended order."
+    template="Given the {level} in the IIT Madras BS Data Science program and completed courses: {completed_courses}, provide a structured path for selecting upcoming courses with names and recommended order."
 )
 
 
 def get_course_recommendations(level: str, completed_courses: List[str]) -> Dict[str, List[str]]:
     query = prompt_template.format(level=level, completed_courses=", ".join(completed_courses))
-    result = qa_chain.invoke(query).get("result")
-    return result
-
+    result = qa_chain.run(query)
+    lines = result.split('\n')
+    recommendations = {"Recommended Courses": [], "Order": []}
+    for line in lines:
+        if line.startswith("- "):
+            recommendations["Recommended Courses"].append(line[2:])
+        elif line.startswith("Order: "):
+            recommendations["Order"] = line[7:].split(", ")
+    
+    return recommendations
 
 level = "Diploma in Programming"
 completed_courses = ["Database Management Systems", "Programming Data Structures & Algorithms using Python"]
 recommendations = get_course_recommendations(level, completed_courses)
 
-print("Recommended Courses:", recommendations)
+print("Recommended Courses:")
+for course in recommendations["Recommended Courses"]:
+    print(f"- {course}")
+
+print("\nRecommended Order:")
+for i, course in enumerate(recommendations["Order"], 1):
+    print(f"{i}. {course}")
