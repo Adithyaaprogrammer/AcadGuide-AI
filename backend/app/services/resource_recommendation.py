@@ -11,7 +11,7 @@ from langchain.prompts import PromptTemplate
 app = FastAPI()
 
 # Set up API key for Groq
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
 
 # Initialize LLM (Groq Mixtral)
 llm = ChatGroq(model_name="deepseek-r1-distill-qwen-32b")

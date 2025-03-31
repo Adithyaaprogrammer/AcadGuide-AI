@@ -12,7 +12,7 @@ from langchain.prompts import PromptTemplate
 os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
 
 # Initialize LLM (Groq Mixtral)
-llm = ChatGroq(model_name="mixtral-8x7b-32768")
+llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 
 # Load embeddings
 embeddings = HuggingFaceEmbeddings()

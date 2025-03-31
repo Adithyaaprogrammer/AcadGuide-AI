@@ -8,7 +8,7 @@ from langchain.prompts import PromptTemplate
 
 # Initialize components
 os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
-llm = ChatGroq(model_name="mixtral-8x7b-32768")
+llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 embeddings = HuggingFaceEmbeddings()
 
 # Course data and vector stores

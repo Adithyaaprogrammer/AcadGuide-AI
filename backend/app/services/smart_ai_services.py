@@ -49,7 +49,7 @@ def create_vector_db(folders: List[str]):
 folders = ['week1','week2','week3', 'week4']
 create_vector_db(folders)
 
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
 llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 def answer_question(question: str):
   prompt_template = PromptTemplate(
