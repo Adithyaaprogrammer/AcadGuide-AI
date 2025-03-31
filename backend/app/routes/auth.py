@@ -23,7 +23,8 @@ async def login(response: Response, form_data: UserForm, db: Session = Depends(g
             detail="Incorrect username or password",
         )
     response.set_cookie(key="session", value=user.username)
-    return {"message": "Login successful"}
+    return {"message": "Login successful",
+            "user_details": user}
 
 
 @router.post("/logout")

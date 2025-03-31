@@ -38,8 +38,6 @@ def protected_route(request: Request):
             detail="Not authenticated",
         )
     return {"message": f"Hello, {username}! This is a protected route."}
-# app.include_router(student.router, prefix="/student", tags=["Student"], dependencies=[Depends(get_current_user)])
-# app.include_router(instructor.router, prefix="/instructor", tags=["Instructor"], dependencies=[Depends(get_current_user)])
 
 @app.get("/")
 def read_root():

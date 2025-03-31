@@ -1,14 +1,15 @@
 import os
 from typing import List, Dict
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
-# Initialize components
 os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
-llm = ChatGroq(model_name="llama-3.3-70b-versatile")
+
+llm = ChatGroq(model_name="mixtral-8x7b-32768")
+
 embeddings = HuggingFaceEmbeddings()
 
 # Course data and vector stores
@@ -41,31 +42,28 @@ prompt_template = PromptTemplate(
     template="Given the {level} in the IIT Madras BS Data Science program and completed courses: {completed_courses}, provide a structured path for selecting upcoming courses with names and recommended order."
 )
 
+
 def get_course_recommendations(level: str, completed_courses: List[str]) -> Dict[str, List[str]]:
-    # Validate input level
-    valid_levels = ["Foundation Level", "Diploma in Programming", 
-                   "Diploma in Data Science", "BSc Degree Level"]
-    if level not in valid_levels:
-        return {"error": "Invalid program level specified"}
+    query = prompt_template.format(level=level, completed_courses=", ".join(completed_courses))
+    result = qa_chain.run(query)
+    lines = result.split('\n')
+    recommendations = {"Recommended Courses": [], "Order": []}
+    for line in lines:
+        if line.startswith("- "):
+            recommendations["Recommended Courses"].append(line[2:])
+        elif line.startswith("Order: "):
+            recommendations["Order"] = line[7:].split(", ")
     
-    # Format query
-    query = prompt_template.format(
-        level=level,
-        completed_courses=", ".join(completed_courses)
-    )
-    
-    # Retrieve combined context
-    context = combined_retriever(query)
-    context_texts = [doc.page_content for doc in context]
-    
-    # Generate recommendation
-    result = qa_chain.run(input_documents=context_texts, query=query)
-    
-    # Store result for future reference
-    answer_vectorstore.add_texts([f"{level} Recommendation: {result}"])
-    
-    return {
-        "program_level": level,
-        "completed_courses": completed_courses,
-        "recommended_path": result
-    }
+    return recommendations
+
+level = "Diploma in Programming"
+completed_courses = ["Database Management Systems", "Programming Data Structures & Algorithms using Python"]
+recommendations = get_course_recommendations(level, completed_courses)
+
+print("Recommended Courses:")
+for course in recommendations["Recommended Courses"]:
+    print(f"- {course}")
+
+print("\nRecommended Order:")
+for i, course in enumerate(recommendations["Order"], 1):
+    print(f"{i}. {course}")
