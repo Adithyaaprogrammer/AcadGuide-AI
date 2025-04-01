@@ -123,9 +123,9 @@ print("Created table: submissions")
 
 # Insert sample data with hashed passwords
 users = [
-    ("user1", "user1@example.com", hash_password("password1"), "student"),
-    ("user2", "user2@example.com", hash_password("password2"), "student"),
-    ("user3", "user3@example.com", hash_password("password3"), "instructor")
+            ("VKP", "vkp@example.com", hash_password("password1"), "student"),
+    ("AK", "ak@example.com", hash_password("password2"), "student"),
+    ("PS", "ps@example.com", hash_password("password3"), "instructor")
 ]
 cursor.executemany('INSERT INTO users (username, email, hashed_password, role) VALUES (?, ?, ?, ?)', users)
 print("Inserted sample data into table: users")

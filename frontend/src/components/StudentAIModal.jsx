@@ -31,6 +31,9 @@ const ChatbotModal = ({ onClose }) => {
         } else if (selectedFeature === "resource") {
           url += "resource_recommendation";
           options.body = JSON.stringify({ topic: input });
+        } else if (selectedFeature === "structured_learning") {
+          url += "structured_learning_path";
+          options.body = JSON.stringify({ level: input, completed_courses: [] });
         }
 
         aiResponse = await fetch(url, options);
@@ -67,10 +70,11 @@ const ChatbotModal = ({ onClose }) => {
         </div>
         <div className="flex flex-col border-t pt-3 space-y-2">
           <div className="flex space-x-2">
-            <button onClick={() => setSelectedFeature("chat")} className={`p-2 rounded-lg ${selectedFeature === "chat" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Chat</button>
-            <button onClick={() => setSelectedFeature("study_plan")} className={`p-2 rounded-lg ${selectedFeature === "study_plan" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Study Plan</button>
-            <button onClick={() => setSelectedFeature("debugging")} className={`p-2 rounded-lg ${selectedFeature === "debugging" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Debugging</button>
-            <button onClick={() => setSelectedFeature("resource")} className={`p-2 rounded-lg ${selectedFeature === "resource" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Resources</button>
+            <button onClick={() => setSelectedFeature("chat")} className={`p-2 text-sm rounded-lg ${selectedFeature === "chat" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Chat</button>
+            <button onClick={() => setSelectedFeature("study_plan")} className={`p-2 text-sm rounded-lg ${selectedFeature === "study_plan" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Study Plan</button>
+            <button onClick={() => setSelectedFeature("debugging")} className={`p-2 text-sm rounded-lg ${selectedFeature === "debugging" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Debugging</button>
+            <button onClick={() => setSelectedFeature("resource")} className={`p-2 text-sm rounded-lg ${selectedFeature === "resource" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Resources</button>
+            <button onClick={() => setSelectedFeature("structured_learning")} className={`p-2 text-sm rounded-lg ${selectedFeature === "structured_learning" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Structured Learning</button>
           </div>
           <div className="flex items-center">
             <input
@@ -82,7 +86,8 @@ const ChatbotModal = ({ onClose }) => {
               placeholder={
                 selectedFeature === "study_plan" ? "Enter course ID" :
                 selectedFeature === "debugging" ? "Enter code snippet" :
-                selectedFeature === "resource" ? "Enter topic" : "Type your message..."
+                selectedFeature === "resource" ? "Enter topic" :
+                selectedFeature === "structured_learning" ? "Enter your level" : "Type your message..."
               }
             />
             <button onClick={sendMessage} className="bg-orange-500 text-white p-2 rounded-lg ml-2 hover:bg-orange-600">
@@ -101,7 +106,7 @@ const StudentAIModal = () => {
 
   useEffect(() => {
     const handleAIButtonClick = (event) => {
-      const allowedRoutes = ["/student-dashboard", "/course-page"];
+      const allowedRoutes = ["/home","/student-dashboard", "/course-page"];
       const isCoursePath = location.pathname.startsWith("/course/");
 
       if (allowedRoutes.includes(location.pathname) || isCoursePath) {

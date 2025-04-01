@@ -1,9 +1,39 @@
 import { Link } from "react-router-dom";
 import { Menu, ChevronLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const updateUser = () => {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
+
+    updateUser();
+    window.addEventListener("storage", updateUser);
+
+    return () => {
+      window.removeEventListener("storage", updateUser);
+    };
+  }, []);
+
+  const navItems = {
+    student: [
+      { path: "/home", label: "Home" },
+      { path: "/course-page", label: "Student Courses" },
+      { path: "/student-dashboard", label: "Student Dashboard" },
+    ],
+    instructor: [
+      { path: "/home", label: "Home" },
+      { path: "/instructor-course-page", label: "Instructor Courses" },
+      { path: "/instructor-dashboard", label: "Instructor Dashboard" },
+    ],
+  };
+
+  const userRole = user?.role;
 
   return (
     <div
@@ -20,35 +50,13 @@ const Sidebar = () => {
 
       <nav className={`space-y-4 ${isCollapsed ? "text-center" : ""} mt-32 ml-1`}>
         <ul className="text-lg font-medium">
-          <li>
-            <Link to="/home" className="block p-2 rounded hover:underline">
-              {!isCollapsed && "Home"}
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/course-page" className="block p-2 rounded hover:underline">
-              {!isCollapsed && "Student Courses"}
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/student-dashboard" className="block p-2 rounded hover:underline">
-              {!isCollapsed && "Student Dashboard"}
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/instructor-course-page" className="block p-2 rounded hover:underline">
-              {!isCollapsed && "Instructor Courses"}
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/instructor-dashboard" className="block p-2 rounded hover:underline">
-              {!isCollapsed && "Instructor Dashboard"}
-            </Link>
-          </li>
+          {navItems[userRole]?.map((item) => (
+            <li key={item.path}>
+              <Link to={item.path} className="block p-2 rounded hover:underline">
+                {!isCollapsed && item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>
