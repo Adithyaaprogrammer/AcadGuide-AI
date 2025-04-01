@@ -33,6 +33,7 @@ def create_user(db: Session, user: UserCreate):
 
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)
+    print(user)
     if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     db_user = User(username=user.username, email=user.email, role=user.role)

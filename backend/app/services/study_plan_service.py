@@ -9,7 +9,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 # Set up API key for Groq
-os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
+os.environ["GROQ_API_KEY"] = "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"
 
 # Initialize LLM (Groq Mixtral)
 llm = ChatGroq(model_name="llama-3.3-70b-versatile")

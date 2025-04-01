@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +10,7 @@ const Signup = () => {
   });
 
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +21,7 @@ const Signup = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:7777/users/signup", {
+      const response = await fetch("http://localhost:8000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,6 +35,7 @@ const Signup = () => {
       }
 
       alert("Signup successful!");
+      navigate("/login");
     } catch (error) {
       setError(error.message);
     }

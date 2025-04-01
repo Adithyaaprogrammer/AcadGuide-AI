@@ -30,7 +30,7 @@ def create_vector_db(folders: List[str]):
     embeddings = HuggingFaceEmbeddings()
     persist_directory = 'db'  # Directory to store the vector database
     all_docs = []
-    base_path = r"C:\Users\rchan\Downloads\GitHub\soft-engg-project-jan-2025-se-Jan-15\backend\app\services\Content"
+    base_path = r"/Users/vkp/Documents/PycharmProjects/soft-engg-project-jan-2025-se-Jan-15/backend/app/services/Content"
     for week_num, folder in enumerate(folders, 1):
         folder_path = os.path.join(base_path, folder)
         for filename in os.listdir(folder_path):
@@ -60,11 +60,11 @@ def create_vector_db(folders: List[str]):
     print(f"Vector database created and saved to: {persist_directory}")
 
 # Example usage:
-folders = ['Week 3']
+folders = ['Week 1', 'Week 3']
 create_vector_db(folders)
 
 # Set up LLM
-os.environ["GROQ_API_KEY"] = "groq_key"
+os.environ["GROQ_API_KEY"] = "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"
 llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 
 def answer_question(question: str):

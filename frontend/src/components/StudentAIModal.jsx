@@ -5,14 +5,42 @@ import { Send, X } from "lucide-react";
 const ChatbotModal = ({ onClose }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [selectedFeature, setSelectedFeature] = useState("chat");
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim() !== "") {
-      setMessages([...messages, { text: input, sender: "user" }]);
+      const userMessage = { text: input, sender: "user" };
+      setMessages([...messages, userMessage]);
       setInput("");
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { text: "AI: " + input, sender: "ai" }]);
-      }, 1000);
+      
+      let response = "";
+      try {
+        let aiResponse;
+        let url = "http://localhost:8000/api/ai/";
+        let options = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) };
+
+        if (selectedFeature === "chat") {
+          url += `answer_question?question=${encodeURIComponent(input)}`;
+          options = { method: "POST", headers: { "Content-Type": "application/json" } };
+        } else if (selectedFeature === "study_plan") {
+          url += "generate_study_plan";
+          options.body = JSON.stringify({ course_id: input, student_id: 123 });
+        } else if (selectedFeature === "debugging") {
+          url += "debugging_tips";
+          options.body = JSON.stringify({ code: input });
+        } else if (selectedFeature === "resource") {
+          url += "resource_recommendation";
+          options.body = JSON.stringify({ topic: input });
+        }
+
+        aiResponse = await fetch(url, options);
+        const data = await aiResponse.json();
+        response = data.answer || data.study_plan || data.tips || data.recommended_resources || "No response received.";
+      } catch (error) {
+        response = "Error fetching AI response.";
+      }
+
+      setMessages((prev) => [...prev, { text: "AI: " + response, sender: "ai" }]);
     }
   };
 
@@ -20,7 +48,7 @@ const ChatbotModal = ({ onClose }) => {
     <div className="fixed inset-0 flex items-center mt-18 z-20 justify-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}>
       <div className="bg-white p-6 rounded-lg w-full max-w-lg flex flex-col h-4/5 shadow-lg">
         <div className="flex justify-between items-center mb-4 border-b pb-2">
-          <h2 className="text-xl font-bold">Student AI Chatbot</h2>
+          <h2 className="text-xl font-bold">AI Chatbot</h2>
           <button onClick={onClose} className="text-red-500 hover:text-red-700">
             <X size={24} />
           </button>
@@ -37,18 +65,30 @@ const ChatbotModal = ({ onClose }) => {
             </div>
           ))}
         </div>
-        <div className="flex items-center border-t pt-3">
-          <input
-            type="text"
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="Type your message..."
-          />
-          <button onClick={sendMessage} className="bg-orange-500 text-white p-2 rounded-lg ml-2 hover:bg-orange-600">
-            <Send size={20} />
-          </button>
+        <div className="flex flex-col border-t pt-3 space-y-2">
+          <div className="flex space-x-2">
+            <button onClick={() => setSelectedFeature("chat")} className={`p-2 rounded-lg ${selectedFeature === "chat" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Chat</button>
+            <button onClick={() => setSelectedFeature("study_plan")} className={`p-2 rounded-lg ${selectedFeature === "study_plan" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Study Plan</button>
+            <button onClick={() => setSelectedFeature("debugging")} className={`p-2 rounded-lg ${selectedFeature === "debugging" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Debugging</button>
+            <button onClick={() => setSelectedFeature("resource")} className={`p-2 rounded-lg ${selectedFeature === "resource" ? "bg-orange-500 text-white" : "bg-gray-300"}`}>Resources</button>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="text"
+              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              placeholder={
+                selectedFeature === "study_plan" ? "Enter course ID" :
+                selectedFeature === "debugging" ? "Enter code snippet" :
+                selectedFeature === "resource" ? "Enter topic" : "Type your message..."
+              }
+            />
+            <button onClick={sendMessage} className="bg-orange-500 text-white p-2 rounded-lg ml-2 hover:bg-orange-600">
+              <Send size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

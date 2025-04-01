@@ -131,10 +131,10 @@ cursor.executemany('INSERT INTO users (username, email, hashed_password, role) V
 print("Inserted sample data into table: users")
 
 courses = [
-    ("Math", 3),
-    ("Science", 3),
-    ("History", 3),
-    ("Art", 3)
+    ("DSA", 3),
+    ("SC", 3),
+    ("Python", 3),
+    ("Java", 3)
 ]
 cursor.executemany('INSERT INTO courses (title, instructor_id) VALUES (?, ?)', courses)
 print("Inserted sample data into table: courses")

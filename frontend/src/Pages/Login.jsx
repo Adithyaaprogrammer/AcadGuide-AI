@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -7,7 +7,6 @@ const Login = () => {
     email: "",
     password: "",
   });
-
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
@@ -19,7 +18,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:7777/users/login", {
+      const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,10 +32,18 @@ const Login = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.access_token);
-      alert("Login successful!");
-      navigate("/course-page");
+      console.log("Login Response:", data);
+      if (data.user_details) {
+        localStorage.setItem("user", JSON.stringify(data.user_details));
+        console.log("User details saved to localStorage:", data.user_details);
+        window.dispatchEvent(new Event("storage")); // Trigger storage event
+        alert("Login successful!");
+        navigate("/course-page");
+      } else {
+        throw new Error("User details not received");
+      }
     } catch (error) {
+      console.error("Login Error:", error);
       setError(error.message);
     }
   };

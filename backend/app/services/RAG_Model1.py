@@ -6,9 +6,9 @@ from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
-os.environ["GROQ_API_KEY"] = "your_groq_api_key_here"
+os.environ["GROQ_API_KEY"] = "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"
 
-llm = ChatGroq(model_name="mixtral-8x7b-32768")
+llm = ChatGroq(model_name="llama-3.3-70b-versatile")
 
 embeddings = HuggingFaceEmbeddings()
 
@@ -53,7 +53,7 @@ def get_course_recommendations(level: str, completed_courses: List[str]) -> Dict
             recommendations["Recommended Courses"].append(line[2:])
         elif line.startswith("Order: "):
             recommendations["Order"] = line[7:].split(", ")
-    
+
     return recommendations
 
 level = "Diploma in Programming"

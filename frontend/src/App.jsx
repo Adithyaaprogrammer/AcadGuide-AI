@@ -17,6 +17,7 @@ import AIAgent from './Pages/AIAgent';
 import Home from './Pages/Home';
 import SpecificCoursePage from './Pages/SpecificCoursePage';
 import StudentAIModal from './components/StudentAIModal';
+import InstructorAIModal from './components/InstructorAIModal';
 
 const AppLayout = () => {
   return (
@@ -30,10 +31,13 @@ const AppLayout = () => {
       </div>
       <AIButton />
       <StudentAIModal />
+      <InstructorAIModal />
       {/* <Footer /> */}
     </div>
   );
 };
+
+
 
 const App = () => {
 

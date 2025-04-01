@@ -1,91 +1,84 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
+import { useState, useEffect } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
-const Dashboard = () => {
-  const gaData = [
-    { name: "You", python: 2, java: 3, system: 4, dsa: 5 },
-    { name: "Your Peers", python: 4, java: 4, system: 5, dsa: 3 },
-  ];
+const StudentDashboard = () => {
+  const [subjectsProgress, setSubjectsProgress] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const pieData = {
-    python: [
-      { name: "You", value: 3, color: "#FFD700", head: "Python for Data Science" },
-      { name: "Your Peers", value: 97, color: "#DC006A", head: "Python for Data Science" },
-    ],
-    java: [
-      { name: "You", value: 5, color: "#FFD700", head: "Programming in Java" },
-      { name: "Your Peers", value: 95, color: "#DC006A", head: "Programming in Java" },
-    ],
-    system: [
-      { name: "You", value: 12, color: "#FFD700", head: "System Commands" },
-      { name: "Your Peers", value: 88, color: "#DC006A", head: "System Commands" },
-    ],
-    dsa: [
-      { name: "You", value: 12, color: "#FFD700", head: "Data Structures and Algorithms" },
-      { name: "Your Peers", value: 88, color: "#DC006A", head: "Data Structures and Algorithms" },
-    ],
-  };
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const progressResponse = await fetch("http://localhost:8000/student/dashboard", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!progressResponse.ok) {
+          throw new Error("Failed to fetch student progress.");
+        }
+
+        const progressData = await progressResponse.json();
+        setSubjectsProgress(progressData.subjects_progress);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) return <p className="text-center text-xl">Loading...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
+
+  const barChartDataAvg = subjectsProgress.map((subject) => ({
+    name: subject.course_name,
+    student: subject.student_progress,
+    average: subject.average_progress,
+  }));
+
+  const barChartDataMedian = subjectsProgress.map((subject) => ({
+    name: subject.course_name,
+    student: subject.student_progress,
+    median: subject.median_progress,
+  }));
 
   return (
-    <div className="ml-16 container mx-auto my-auto px-4 py-6">
-      <div className="grid grid-cols-2 gap-8">
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-center mb-6 mt-10">Student Dashboard</h2>
 
-        <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-center mb-10">Number of GAs submitted</h3>
-            <div className="bg-orange-200 p-6 rounded-lg shadow-lg">
-              <BarChart width={450} height={520} data={gaData} className="mx-auto">
-                <XAxis dataKey="name" tick={{ fill: "black" }} />
-                <YAxis tick={{ fill: "black" }} />
-                <Tooltip />
-                <Legend wrapperStyle={{ marginTop: "20px" }} />
-                <Bar dataKey="python" fill="#DC006A" name="Python for Data Science" />
-                <Bar dataKey="java" fill="#00BF63" name="Programming in Java" />
-                <Bar dataKey="system" fill="#2289E6" name="System Commands" />
-                <Bar dataKey="dsa" fill="#FEB172" name="Data Structures and Algorithms" />
-              </BarChart>
-            </div>
+      {/* Side-by-side Charts */}
+      <div className="flex flex-wrap justify-center gap-10">
+        {/* Student Progress vs Average Progress */}
+        <div className="bg-orange-200 p-6 rounded-lg shadow-lg w-[600px]">
+          <h3 className="text-xl font-bold text-center mb-4">Your Progress vs Average Progress</h3>
+          <BarChart width={550} height={400} data={barChartDataAvg}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="student" fill="#DC006A" name="Your Progress" />
+            <Bar dataKey="average" fill="#00BF63" name="Average Progress" />
+          </BarChart>
         </div>
 
-        <div className="space-y-4">
-          <h3 className="text-2xl font-bold text-center mb-10">Number of videos watched</h3>
-          <div className="grid grid-cols-2 gap-6">
-            {Object.entries(pieData).slice(0, 2).map(([key, data]) => (
-              <div key={key} className="bg-orange-200 p-4 rounded-lg shadow-lg">
-                <h2 className="text-lg font-bold mb-4">{data[0].head}</h2>
-                <div className="flex justify-center">
-                  <PieChart width={200} height={200}>
-                    <Pie data={data} dataKey="value" cx="50%" cy="50%" outerRadius={80}>
-                      {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center gap-6">
-            {Object.entries(pieData).slice(2, 4).map(([key, data]) => (
-              <div key={key} className="bg-orange-200 p-4 rounded-lg shadow-lg w-1/2">
-                <h2 className="text-lg font-bold mb-4">{data[0].head}</h2>
-                <div className="flex justify-center">
-                  <PieChart width={200} height={200}>
-                    <Pie data={data} dataKey="value" cx="50%" cy="50%" outerRadius={80}>
-                      {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Student Progress vs Median Progress */}
+        <div className="bg-blue-200 p-6 rounded-lg shadow-lg w-[600px]">
+          <h3 className="text-xl font-bold text-center mb-4">Your Progress vs Median Progress</h3>
+          <BarChart width={550} height={400} data={barChartDataMedian}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="student" fill="#DC006A" name="Your Progress" />
+            <Bar dataKey="median" fill="#007BFF" name="Median Progress" />
+          </BarChart>
         </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default StudentDashboard;
